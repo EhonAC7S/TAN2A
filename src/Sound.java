@@ -8,7 +8,13 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-
+/**
+ * Lit un fichier wav.
+ * Permet de savoir si l'algorithme de diffusion du son marche.
+ *  
+ * ( Classe Témoin)
+ * 
+ * */
 
 public class Sound {
 	
@@ -17,7 +23,6 @@ public class Sound {
     private AudioInputStream audioStream;
     private AudioFormat audioFormat;
     private SourceDataLine sourceLine;
-    
 
     public Sound(String filename){
 
@@ -84,13 +89,12 @@ public class Sound {
         //ferme le fichier audio
         sourceLine.drain();
         sourceLine.close();
-
     }
     
     
     public static void main(String[] args) throws Exception{
     	new Sound("250Hz_44100Hz_16bit_30sec.wav");
-		//new Sound("mosquito.wav");
+    	//new  Sound("188708__zywx__flying-mosquito.wav");
 	}
 
 }

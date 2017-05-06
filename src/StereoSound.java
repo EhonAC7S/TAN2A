@@ -8,21 +8,45 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-public class StereoSound {
+/**
+ * Lit un fichier wav 16bits mono pour le transformer en stereo.
+ * La fonction "monoToStereo" permet également de baisser à volonté le son arrivant dans chaque oreille.
+ * 
+ * 
+ * !!!!!!!!! Le fichier doit être codé en 16 BITS !!!!!!!!!!!!!!!!!!!!!
+ * 				(sinon vos oreilles vont souffrir)
+ * 
+ * */
 
-	private final int BUFFER_SIZE = 128000;
+public class  StereoSound {
+	
     private File soundFile;
     private AudioInputStream audioStream;
+    private AudioFormat audioFormat;
     private SourceDataLine sourceLine;
-    private boolean mono = false;
+    private int dataSize;
+    static final int INFINI = 2147483647;
+    
+    
+	public  StereoSound(String filename){
 
-	public StereoSound(String filename){
+		System.out.println("Début !!!");
+        
+		setSoundOptions(filename);
+		sourceLine.start();
+        lecture();
+        sourceLine.drain();
+        sourceLine.close();
 
-		String strFilename = filename;
-
-        // on ouvre le fichier
+        System.out.println("Fin !!!");
+    }
+    
+    // on remplit les variables
+	private void setSoundOptions(String filename){
+		
+		// on ouvre le fichier
         try {
-        	soundFile = new File(strFilename);
+        	soundFile = new File(filename);
         } catch (Exception e) {
         	e.printStackTrace();
         	System.exit(1);
@@ -35,34 +59,13 @@ public class StereoSound {
         	e.printStackTrace();
             System.exit(1);
         }
-       
-        getsourceLine();
-	
-        //permet à la ligne d'engager l' entrée/sortie
-        sourceLine.start();
-
-        lecture();
-
-        //ferme le fichier audio
-        sourceLine.drain();
-        sourceLine.close();
-    }
-    
-    
-	private void getsourceLine(){
 		
-		AudioFormat audioFormat;
-		
-		 // on recupere le format du fichier son
-		if(mono){
-			audioFormat = audioStream.getFormat();
-		}
-		else{
-			audioFormat = getStereoFormat(audioStream.getFormat());
-		}
+		 // on modifie le format du fichier son
+        audioFormat = getStereoFormat(audioStream.getFormat());
+
 		
 		 // dans infos toutes les infos de lecture du son ()
-		DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+		DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);;
 		try {
 		     sourceLine = (SourceDataLine) AudioSystem.getLine(info);
 		     sourceLine.open(audioFormat);
@@ -74,46 +77,49 @@ public class StereoSound {
 		     System.exit(1);
 		 }
     }
-	
+   
 	// lit le fichier audio
 	private void lecture(){
-		 
-        int nBytesRead = 0;
+		
+		// on regarde combien de bytes on va lire
+		dataSize = ((int) audioStream.getFrameLength() )*audioFormat.getSampleSizeInBits()/8;
+  
+		// on initialise les tableaux de bytes
+		byte[] monoData = new byte[dataSize];
+        byte[] stereoData =  new byte[dataSize*2];
         
-        byte[] monoData = new byte[BUFFER_SIZE];
-        byte[] stereoData =  new byte[BUFFER_SIZE*2];
-        
-        while (nBytesRead != -1) {
-            try {
-                nBytesRead = audioStream.read(monoData, 0, BUFFER_SIZE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            
-            if(mono){
-            	if (nBytesRead >= 0) {
-            		sourceLine.write(monoData, 0, BUFFER_SIZE);
-            	}
-            }
-            else{
-            	monoToStereo(monoData, stereoData);
-            	if (nBytesRead >= 0) {
-                	sourceLine.write(stereoData, 0, BUFFER_SIZE*2);
-                }
-            }
-            System.out.println("------------");   
+        // on lit les bytes de musique en mono
+        try {
+            audioStream.read(monoData, 0, dataSize);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        // on passe en stereo
+        monoToStereo(monoData, stereoData);
+        
+        sourceLine.write(stereoData, 0, dataSize*2);
 	}
     
-    
+	
 	 // incoming: mono input stream  |   outgoing: stereo output stream
-	void monoToStereo(byte[] incoming, byte[] outgoing){
+	private void monoToStereo(byte[] incoming, byte[] outgoing){
+		
+		// c'est ici qu'on calcul pour moddifier les coefs !!!!!!!!!!!
+		
+		double coefGauche = INFINI;
+		double coefDroit = 1;
+		
 		for (int i = 0; i < incoming.length; i=i+2){
-			outgoing[ 2*i ] = incoming[i]; //gauche 1
-			outgoing[2*i+1] = incoming[i+1]; //gauche 2
-			outgoing[2*i+2] = incoming[i]; // droite 1
-			outgoing[2*i+3] = incoming[i+1]; // droite 2
+			outgoing[ 2*i ] = (byte) (incoming[i]/coefGauche); //gauche 1
+			outgoing[2*i+1] = (byte) (incoming[i+1]/coefGauche); //gauche 2
+			outgoing[2*i+2] = (byte) (incoming[i]/coefDroit); // droite 1
+			outgoing[2*i+3] = (byte) (incoming[i+1]/coefDroit); // droite 2
 		}
+		
+		// c'est bizare le son dans les i n'a pas l'air de faire quelque chose
+		
+		// éviter de mettre coef entre 0 et 1 (ouille les oreilles)
 	} 
 	 
 
@@ -126,13 +132,14 @@ public class StereoSound {
 	    	
 		 return new AudioFormat(sampleRate, sampleSizeInBits, channels, true, bigEndian);
 	}
+    
 	
-
-	 
-    public static void main(String[] args) throws Exception 
-	{
-    	new StereoSound("250Hz_44100Hz_16bit_30sec.wav");
-		//new Sound("mosquito.wav");
+    
+	public static void main(String[] args) throws Exception {
+		
+    	//new  StereoSound("250Hz_44100Hz_16bit_30sec.wav");
+		new  StereoSound("188708__zywx__flying-mosquito.wav"); 
 	}
 }
+
 
