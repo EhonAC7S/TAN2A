@@ -11,8 +11,7 @@
 ### TO DO:
 
 #### partie audio pure
- - recuperer un fichier audio monophonique de quelques dizaines de secondes(WAV de preference qualité CD-A 44100 Hz et 16 bits par échantillon) et en extraire les informations.
- - creer un fichier audio WAV stéréophonique binaural à partir d'informations !
+ - DONE ! (Ou presque, surement quelques modifs)
 
 #### partie deplacement du son
  - creer des coordonnées de déplacement M(x,z,v)
