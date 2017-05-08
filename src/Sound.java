@@ -74,7 +74,7 @@ public class Sound {
 
         // lit le fichier audio
         int nBytesRead = 0;
-        byte[] abData = new byte[BUFFER_SIZE];
+        byte[] abData = new byte[BUFFER_SIZE*10];
         while (nBytesRead != -1) {
             try {
                 nBytesRead = audioStream.read(abData, 0, abData.length);
@@ -93,8 +93,10 @@ public class Sound {
     
     
     public static void main(String[] args) throws Exception{
+ 
     	new Sound("250Hz_44100Hz_16bit_30sec.wav");
-    	//new  Sound("188708__zywx__flying-mosquito.wav");
+    	//new Sound("guitar.wav");
+    	//new Sound("Tiger.wav");
 	}
 
 }

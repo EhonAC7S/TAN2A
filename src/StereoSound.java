@@ -9,11 +9,11 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 /**
- * Lit un fichier wav 16bits mono pour le transformer en stereo.
+ * Lit un fichier wav 16bits MONO pour le transformer en STEREO.
  * La fonction "monoToStereo" permet également de baisser à volonté le son arrivant dans chaque oreille.
  * 
  * 
- * !!!!!!!!! Le fichier doit être codé en 16 BITS !!!!!!!!!!!!!!!!!!!!!
+ * !!!!!!!!! Le fichier doit être un MONO codé en 16 BITS !!!!!!!!!!!!!!!!!!!!!
  * 				(sinon vos oreilles vont souffrir)
  * 
  * */
@@ -41,6 +41,7 @@ public class  StereoSound {
         System.out.println("Fin !!!");
     }
     
+	
     // on remplit les variables
 	private void setSoundOptions(String filename){
 		
@@ -105,9 +106,8 @@ public class  StereoSound {
 	 // incoming: mono input stream  |   outgoing: stereo output stream
 	private void monoToStereo(byte[] incoming, byte[] outgoing){
 		
-		// c'est ici qu'on calcul pour moddifier les coefs !!!!!!!!!!!
-		
-		double coefGauche = INFINI;
+		// éviter de mettre coef entre 0 et 1 (ouille les oreilles)
+		double coefGauche = 1;
 		double coefDroit = 1;
 		
 		for (int i = 0; i < incoming.length; i=i+2){
@@ -116,29 +116,34 @@ public class  StereoSound {
 			outgoing[2*i+2] = (byte) (incoming[i]/coefDroit); // droite 1
 			outgoing[2*i+3] = (byte) (incoming[i+1]/coefDroit); // droite 2
 		}
-		
-		// c'est bizare le son dans les i n'a pas l'air de faire quelque chose
-		
-		// éviter de mettre coef entre 0 et 1 (ouille les oreilles)
 	} 
 	 
 
-	// retourne un format audio stereo avec les memes caractéristiques que le mono en entré
+	// retourne un format audio stereo avec les memes caractéristiques que le mono en entrée
 	private AudioFormat getStereoFormat(AudioFormat baseFormat) {
-		 float sampleRate = baseFormat.getSampleRate();
-		 int sampleSizeInBits = baseFormat.getSampleSizeInBits();
-		 int channels = 2;
-		 boolean bigEndian = false;
-	    	
-		 return new AudioFormat(sampleRate, sampleSizeInBits, channels, true, bigEndian);
+		AudioFormat.Encoding encoding = baseFormat.getEncoding();
+		float sampleRate = baseFormat.getSampleRate();
+		int sampleSizeInBits = baseFormat.getSampleSizeInBits();
+		int channels = 2;
+		int frameSize = sampleSizeInBits * channels/8;
+		float frameRate = baseFormat.getFrameRate();
+		boolean bigEndian = false;
+		
+		/*int channelOrigin = baseFormat.getChannels();
+		System.out.println("channelOrigin " + channelOrigin);*/
+		
+		return new AudioFormat(encoding, sampleRate, sampleSizeInBits,channels, frameSize, frameRate, bigEndian);
 	}
     
 	
     
 	public static void main(String[] args) throws Exception {
 		
+		
     	//new  StereoSound("250Hz_44100Hz_16bit_30sec.wav");
-		new  StereoSound("188708__zywx__flying-mosquito.wav"); 
+		//new  StereoSound("guitar.wav");
+		new  StereoSound("Tiger.wav");
+		
 	}
 }
 
