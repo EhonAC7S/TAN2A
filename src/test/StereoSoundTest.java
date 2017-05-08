@@ -1,3 +1,4 @@
+package test;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ import javax.sound.sampled.SourceDataLine;
  * 
  * */
 
-public class  StereoSound {
+public class  StereoSoundTest {
 	
     private File soundFile;
     private AudioInputStream audioStream;
@@ -28,7 +29,7 @@ public class  StereoSound {
     static final int INFINI = 2147483647;
     
     
-	public  StereoSound(String filename){
+	public  StereoSoundTest(String filename){
 
 		System.out.println("Début !!!");
         
@@ -108,7 +109,7 @@ public class  StereoSound {
 		
 		// éviter de mettre coef entre 0 et 1 (ouille les oreilles)
 		double coefGauche = 1;
-		double coefDroit = 1;
+		double coefDroit = INFINI;
 		
 		for (int i = 0; i < incoming.length; i=i+2){
 			outgoing[ 2*i ] = (byte) (incoming[i]/coefGauche); //gauche 1
@@ -141,8 +142,8 @@ public class  StereoSound {
 		
 		
     	//new  StereoSound("250Hz_44100Hz_16bit_30sec.wav");
-		//new  StereoSound("guitar.wav");
-		new  StereoSound("Tiger.wav");
+		new  StereoSoundTest("guitar.wav");
+		//new  StereoSound("Tiger.wav");
 		
 	}
 }

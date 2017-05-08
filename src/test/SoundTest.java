@@ -1,3 +1,4 @@
+package test;
 import java.io.File;
 import java.io.IOException;
 
@@ -12,11 +13,11 @@ import javax.sound.sampled.SourceDataLine;
  * Lit un fichier wav.
  * Permet de savoir si l'algorithme de diffusion du son marche.
  *  
- * ( Classe Témoin)
+ * ( Classe Témoin )
  * 
  * */
 
-public class Sound {
+public class SoundTest {
 	
 	private final int BUFFER_SIZE = 128000;
     private File soundFile;
@@ -24,7 +25,7 @@ public class Sound {
     private AudioFormat audioFormat;
     private SourceDataLine sourceLine;
 
-    public Sound(String filename){
+    public SoundTest(String filename){
 
         String strFilename = filename;
 
@@ -94,8 +95,8 @@ public class Sound {
     
     public static void main(String[] args) throws Exception{
  
-    	new Sound("250Hz_44100Hz_16bit_30sec.wav");
-    	//new Sound("guitar.wav");
+    	//new Sound("250Hz_44100Hz_16bit_30sec.wav");
+    	new SoundTest("guitar.wav");
     	//new Sound("Tiger.wav");
 	}
 

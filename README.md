@@ -14,5 +14,6 @@
  - DONE ! (Ou presque, surement quelques modifs)
 
 #### partie deplacement du son
+ - Calcuuuuulssssss
  - creer des coordonnées de déplacement M(x,z,v)
  - recuperer un son a envoyer dans chaque oreille en fonction du deplacement de l'objet sonore
