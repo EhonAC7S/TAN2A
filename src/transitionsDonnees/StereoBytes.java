@@ -1,4 +1,11 @@
 package transitionsDonnees;
+
+/**
+* Recupere les données en int mofifiées pour chaque oreille du son,
+* les transforment et les stockent dans un tableau de bytes. 
+* 
+**/
+
 public class StereoBytes {
 	
 	byte[] stereoData;

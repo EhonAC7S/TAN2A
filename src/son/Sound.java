@@ -7,9 +7,14 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+/**
+ * Recupere le fichier wav et en extrait les informations utiles pour la suite. 
+ * 
+ * */
+
 public class Sound {
 	
-	String filename;
+	private String filename;
 	private File soundFile;
 	private AudioInputStream audioStream;
 	private AudioFormat audioFormat;

@@ -95,9 +95,9 @@ public class SoundTest {
     
     public static void main(String[] args) throws Exception{
  
-    	//new Sound("250Hz_44100Hz_16bit_30sec.wav");
-    	new SoundTest("guitar.wav");
-    	//new Sound("Tiger.wav");
+    	//new Sound("sons/250Hz_44100Hz_16bit_30sec.wav");
+    	new SoundTest("sons/guitar.wav");
+    	//new Sound("sons/Tiger.wav");
 	}
 
 }

@@ -1,5 +1,10 @@
 package transitionsDonnees;
 
+/**
+* Recupere les données en bytes du son, les transforment et les stockent dans un tableau d'int. 
+* 
+**/
+
 public class MonoDatas {
 
 	int[] datas;

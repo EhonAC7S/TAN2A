@@ -6,6 +6,11 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
+/**
+* Lit le son modifié en stereo 
+* 
+**/
+
 public class LectureSound {
 
 	private SourceDataLine sourceLine;
@@ -32,9 +37,14 @@ public class LectureSound {
 	
 	// lit le fichier audio
 	private void lecture(byte[] stereoData){
+			System.out.println("Début Lecture");
+			System.out.println(".");
+			System.out.println(".");
+			System.out.println(".");
 	        sourceLine.start();
 	        sourceLine.write(stereoData, 0, stereoData.length);  
 	        sourceLine.drain();
 	        sourceLine.close();
+	        System.out.println("Fin Lecture");
 	}
 }

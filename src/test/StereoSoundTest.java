@@ -141,9 +141,9 @@ public class  StereoSoundTest {
 	public static void main(String[] args) throws Exception {
 		
 		
-    	//new  StereoSound("250Hz_44100Hz_16bit_30sec.wav");
-		new  StereoSoundTest("guitar.wav");
-		//new  StereoSound("Tiger.wav");
+    	//new  StereoSound("sons/250Hz_44100Hz_16bit_30sec.wav");
+		new  StereoSoundTest("sons/guitar.wav");
+		//new  StereoSound("sons/Tiger.wav");
 		
 	}
 }
